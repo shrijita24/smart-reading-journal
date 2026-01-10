@@ -18,6 +18,47 @@ def init_db():
     """)
     conn.commit()
     conn.close()
+    
+def seed_sample_notes():
+    conn = sqlite3.connect("journal.db")
+    c = conn.cursor()
+
+    # Check if table already has data
+    c.execute("SELECT COUNT(*) FROM notes")
+    count = c.fetchone()[0]
+
+    if count == 0:
+        sample_notes = [
+            (
+                "Atomic Habits",
+                "James Clear",
+                "Habits are the compound interest of self-improvement. Small changes matter over time.",
+                "habits, self-improvement"
+            ),
+            (
+                "Atomic Habits",
+                "James Clear",
+                "You do not rise to the level of your goals. You fall to the level of your systems.",
+                "systems, productivity"
+            ),
+            (
+                "Atomic Habits",
+                "James Clear",
+                "Every action you take is a vote for the type of person you wish to become.",
+                "identity, behavior"
+            )
+        ]
+
+        c.executemany(
+            "INSERT INTO notes (book, author, note, tags) VALUES (?, ?, ?, ?)",
+            sample_notes
+        )
+
+        conn.commit()
+
+    conn.close()
+    
+
 
 def add_note(book, author, note, tags):
     conn = sqlite3.connect("journal.db")
@@ -53,6 +94,8 @@ menu = ["Add Note", "View All Notes", "Search by Book"]
 choice = st.sidebar.radio("Navigate", menu)
 
 init_db()  # Initialize database
+seed_sample_notes()
+
 
 if choice == "Add Note":
     st.subheader("✍️ Add a new note")
@@ -71,6 +114,7 @@ if choice == "Add Note":
 elif choice == "View All Notes":
     st.subheader("📑 All Notes")
     notes = get_notes()
+    st.info("✨ Sample notes are shown for demonstration. You can add your own insights.")
     for row in notes:
         st.markdown(f"**Book:** {row[1]} | **Author:** {row[2]} | **Tags:** {row[4]}")
         st.write(row[3])
