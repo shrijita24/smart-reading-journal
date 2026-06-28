@@ -5,6 +5,7 @@ LumenNotes helps you capture, organise, and retrieve insights from the books you
 
 > 🚀 **Currently upgrading to a full RAG architecture** — Groq + LangChain + FAISS for semantic search and context-aware retrieval across your entire reading history.
 
+🔗 [**Try it live →**](https://lumennotes.streamlit.app/)
 ---
 
 ## ✨ Features
@@ -13,7 +14,7 @@ LumenNotes helps you capture, organise, and retrieve insights from the books you
 - 🔍 Search notes by book title
 - 🗄️ Persistent local storage via a normalised SQLite schema
 - 🤖 GPT-4 API integration for AI-powered reading insights
-- ☁️ Deployed on Streamlit Cloud — zero local setup required
+- ☁️ Deployed on Streamlit Cloud — zero local setup required · [Live App →](https://lumennotes.streamlit.app/)
 
 ---
 
