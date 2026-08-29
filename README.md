@@ -1,7 +1,7 @@
 # LumenNotes 📚
 **An AI-powered reading journal for non-fiction thinkers.**
 
-LumenNotes helps you capture, organise, and retrieve insights from the books you read — built end-to-end with Python, SQLite, and Streamlit, with an AI layer powered by the OpenAI GPT-4 API.
+LumenNotes helps you capture, organise, and retrieve insights from the books you read — built end-to-end with Python, SQLite, and Streamlit, with an AI layer powered by Groq's free-tier LLM API.
 
 > 🚀 **Currently upgrading to a full RAG architecture** — Groq + LangChain + FAISS for semantic search and context-aware retrieval across your entire reading history.
 
@@ -13,7 +13,7 @@ LumenNotes helps you capture, organise, and retrieve insights from the books you
 - 📝 Add and organise book notes with tags
 - 🔍 Search notes by book title
 - 🗄️ Persistent local storage via a normalised SQLite schema
-- 🤖 GPT-4 API integration for AI-powered reading insights
+- 🤖 Groq-powered AI insights across your reading notes (free tier)
 - ☁️ Deployed on Streamlit Cloud — zero local setup required · [Live App →](https://lumennotes.streamlit.app/)
 
 ---
@@ -25,7 +25,7 @@ LumenNotes helps you capture, organise, and retrieve insights from the books you
 | Frontend | Streamlit |
 | Backend | Python |
 | Database | SQLite |
-| AI Layer | OpenAI GPT-4 API |
+| AI Layer | Groq API (free tier) |
 | Deployment | Streamlit Cloud |
 
 ---
@@ -52,9 +52,9 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Add your OpenAI API key to a `.env` file:
+Add your Groq API key to a `.env` file (free, no card required — get one at [console.groq.com](https://console.groq.com)):
 ```
-OPENAI_API_KEY=your_key_here
+GROQ_API_KEY=your_key_here
 ```
 
 ---
