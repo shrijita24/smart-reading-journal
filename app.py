@@ -270,12 +270,15 @@ def render_book_group(book, author, notes, show_actions=True):
 def get_ai_insight(question, notes_context):
     try:
         from openai import OpenAI
-        api_key = st.secrets.get("OPENAI_API_KEY", os.environ.get("OPENAI_API_KEY"))
+        api_key = st.secrets.get("GROQ_API_KEY", os.environ.get("GROQ_API_KEY"))
         if not api_key:
             return None
-        client = OpenAI(api_key=api_key)
+        # Groq exposes an OpenAI-compatible endpoint, so the same OpenAI SDK
+        # works here — just pointed at Groq's base URL with a Groq key.
+        # Free tier, no billing required: https://console.groq.com
+        client = OpenAI(api_key=api_key, base_url="https://api.groq.com/openai/v1")
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="openai/gpt-oss-20b",
             messages=[
                 {"role": "system", "content": "You are a thoughtful reading companion. Based on the user's book notes, provide insightful, concise responses. Be specific and reference actual notes where possible."},
                 {"role": "user", "content": f"Here are my reading notes:\n\n{notes_context}\n\nQuestion: {question}"}
@@ -300,7 +303,7 @@ with st.sidebar:
     total_notes, total_books, starred_count, _ = get_stats()
     st.markdown(f"**{total_notes}** notes · **{total_books}** books · **{starred_count}** starred")
     st.markdown("---")
-    st.markdown("<div style='font-size:12px;color:#adb5bd;text-align:center;'>Built by Shrijita Bhattacharyya<br>Python · SQLite · OpenAI · Streamlit</div>", unsafe_allow_html=True)
+    st.markdown("<div style='font-size:12px;color:#adb5bd;text-align:center;'>Built by Shrijita Bhattacharyya<br>Python · SQLite · Groq · Streamlit</div>", unsafe_allow_html=True)
 
 # ── DASHBOARD ─────────────────────────────────────────────────────────────────
 if menu == "🏠 Dashboard":
@@ -430,24 +433,25 @@ elif menu == "🤖 AI Insights":
     st.markdown("# 🤖 AI Insights")
     st.markdown("---")
 
-    api_key = st.secrets.get("OPENAI_API_KEY", os.environ.get("OPENAI_API_KEY", ""))
+    api_key = st.secrets.get("GROQ_API_KEY", os.environ.get("GROQ_API_KEY", ""))
 
     if not api_key:
         st.markdown("""
         <div class='ai-box'>
-            <div style='font-size:20px;font-weight:700;margin-bottom:8px;'>🔑 Set up your OpenAI API Key</div>
-            <div style='font-size:14px;opacity:0.9;'>Add your key to Streamlit Cloud secrets to unlock AI-powered insights across your reading notes.</div>
+            <div style='font-size:20px;font-weight:700;margin-bottom:8px;'>🔑 Set up your Groq API Key</div>
+            <div style='font-size:14px;opacity:0.9;'>Add your key to Streamlit Cloud secrets to unlock AI-powered insights across your reading notes — free, no credit card required.</div>
         </div>
         """, unsafe_allow_html=True)
         st.markdown("#### How to set it up:")
         st.markdown("""
-1. Go to your app on **Streamlit Cloud**
-2. Click **⋮ (three dots)** → **Settings** → **Secrets**
-3. Add:
+1. Get a free key at **[console.groq.com](https://console.groq.com)** — no credit card required
+2. Go to your app on **Streamlit Cloud**
+3. Click **⋮ (three dots)** → **Settings** → **Secrets**
+4. Add:
 ```
-OPENAI_API_KEY = "sk-your-key-here"
+GROQ_API_KEY = "gsk_your-key-here"
 ```
-4. Click **Save** — app restarts automatically ✅
+5. Click **Save** — app restarts automatically ✅
         """)
         st.info("Once set up, ask things like: *'What are the common themes across my books?'* or *'Summarise my notes on productivity.'*")
     else:
